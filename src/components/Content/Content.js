@@ -1,15 +1,14 @@
-import React from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
-import './App.css';
-import AuthProvider, { AuthContext } from './providers/AuthProvider'
+export class Content extends Component {
 
-function App() {
-  return (
-    <AuthProvider>
-      <AuthContext.Consumer>
-        {(authContext) => (
-          <div className="App">
-          <header className="App-header">
+    async componentDidMount() {
+
+    }
+
+    render() {
+        return (
+            <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <p>
               Edit <code>src/App.js</code> and save to reload.
@@ -23,11 +22,7 @@ function App() {
               Learn React
             </a>
           </header>
-        </div>
-        )}        
-       </AuthContext.Consumer>
-      </AuthProvider>
-  );
-}
+        );
+    }
 
-export default App;
+}
