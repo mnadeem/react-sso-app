@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import logo from '../../imgs/logo.svg';
 export class Content extends Component {
 
     async componentDidMount() {

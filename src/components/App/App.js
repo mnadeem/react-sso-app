@@ -1,8 +1,8 @@
 import React from 'react';
 
 import './App.css';
-import AuthProvider, { AuthContext } from '../../providers/AuthProvider'
-import Content from '../Content/Content'
+import { AuthContext, AuthProvider} from '../../providers/AuthProvider'
+import {Content} from '../Content/Content'
 
 function App() {
   return (
