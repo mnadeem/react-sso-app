@@ -1,0 +1,32 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf ./dist/",
+    "build": "babel ./src/ --presets=babel-preset-env --out-dir dist --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "server:dev": "nodemon ./src/server.js --exec babel-node --presets babel-preset-env",
+    "server:prod": "node ./dist/server.js",
+    "prod": "npm-run-all clean build server:prod",
+    "dev": "npm-run-all server:dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "request-promise": "^4.2.5"
+  }
+}
