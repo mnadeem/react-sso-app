@@ -3,6 +3,11 @@ import logo from '../../imgs/logo.svg';
 export class Content extends Component {
 
     async componentDidMount() {
+        const {doAuthRedirect, getAuthToken, reAuth} = this.props.authContext.state;
+
+        const HREF = window.location.href.trim();
+        const DOMAIN = HREF.substring(0, HREF.lastIndexOf('/'));
+        const PATHNAME = HREF.substring(HREF.lastIndexOf('/') + 1).trim();
 
     }
 
