@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import requestPromise from 'request-promise';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
-import TokenVerifier from './TokenVerifier'
+import {TokenVerifier} from './TokenVerifier';
 
 dotenv.config();
  
@@ -98,13 +98,14 @@ app.post('/api/reauth', (req, res) => {
 });
 
 app.get('/api/secured', TokenVerifier,  (req, res) => {
-    return res.status(200).send({message: "This is secured"});
+    res.status(200).send({message: "This is secured"});
 });
 
 app.get('/health', (req, res) => {
-    return res.status(200).send({message: "Health is good"});
+    res.status(200).send({message: "Health is good"});
 });
  
+
 app.listen(5555, () => {
     console.log("App is listening for requests on port 5555");
 });

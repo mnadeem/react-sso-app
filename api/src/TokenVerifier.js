@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const TokenVerifier = (req, res, next) => {
+export function TokenVerifier (req, res, next) {
     let authHeader = req.headers.authorization;
 
     if (!authHeader) {
