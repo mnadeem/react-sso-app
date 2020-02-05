@@ -6,8 +6,8 @@ Start the keycloak server and configure it as described from [here](https://reac
 
 ## Start API
 
-`npm run dev`
+`react-sso-app\api>npm run dev `
 
 ## Start UI
 
-`npm start`
+`react-sso-app>npm start`
