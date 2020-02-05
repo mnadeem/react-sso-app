@@ -44,7 +44,7 @@ export class Content extends Component {
 
     render() {
         let content;
-        const {isAuthenticated, flash} = this.props.authContext.state;
+        const {isAuthenticated, flash, authState} = this.props.authContext.state;
 
         if (isAuthenticated) {
           content = (
@@ -63,9 +63,13 @@ export class Content extends Component {
             </a>
           </header>
           );
-        } else {
+        } else if (authState === 'error') {
           content = (
             <div> Denied </div>
+          );
+        } else {
+          content = (
+            <div> Attempting to authorize </div>
           );
         }
 

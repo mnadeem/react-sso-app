@@ -79,6 +79,7 @@ export class AuthProvider extends Component {
                         this.setState({
                             ...newState,
                             isAuthenticated : false,
+                            authState : 'error',
                             flash : flash
                         });
                     });
@@ -116,6 +117,7 @@ export class AuthProvider extends Component {
                         this.setState({
                             ...newState,
                             ...initialState,
+                            authState : 'logget-out',
                             flash : 'Thank you for using app'
                         });
     }
