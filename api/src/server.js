@@ -42,10 +42,10 @@ app.post('/api/authtoken', (req, res) => {
     .then( (tokenRes) => {
         const userInfo = jwt.decode(JSON.parse(tokenRes).access_token);
         const userRoles = getRoles(userInfo);
-        console.log(`User ${userInfo.user} successfully logged in.`);
+        console.log(`User ${userInfo.preferred_username} successfully logged in.`);
         res.status(200).send({
             authToken : createJwt(userInfo, userRoles),
-            userId : userInfo.userId,
+            userId : userInfo.preferred_username,
             roles : userRoles
         });
     })
@@ -56,13 +56,13 @@ app.post('/api/authtoken', (req, res) => {
 
 });
 
-function getRoles(userRoles) {
-
+function getRoles(userInfo) {
+    return userInfo.resource_access.react.roles;
 }
 
 function createJwt(userInfo, userRoles) {
     return jwt.sign({
-        userId : userInfo.userId,
+        userId : userInfo.preferred_username,
         roles : userRoles
     }, process.env.TOKEN_SECRET,
     {
