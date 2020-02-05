@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import logo from '../../imgs/logo.svg';
+import {UrlParams} from '../support/UrlParams'
 export class Content extends Component {
 
     async componentDidMount() {
@@ -9,10 +10,44 @@ export class Content extends Component {
         const DOMAIN = HREF.substring(0, HREF.lastIndexOf('/'));
         const PATHNAME = HREF.substring(HREF.lastIndexOf('/') + 1).trim();
 
+        const urlParams = new UrlParams(HREF);
+        const code = urlParams.get('code');
+
+        window.history.replaceState({}, null, '/');
+
+        if (!window.sessionStorge.getItem('authToken')) {
+            if (code) {
+              return getAuthToken(code)
+                        .then(res =>{
+                          console.log('Successfully Authenticated.');
+                        })
+                        .catch(error =>{
+                          console.log(error);
+                        });
+            } else {
+                try {
+                  return await doAuthRedirect(DOMAIN);
+                } catch(error) {
+                  console.log(error);
+                }
+            }
+        } else {
+          Promise.all([reAuth()])
+              .then( res => {
+                console.log('Successfully reAuthenticated.');
+              })
+              .catch(error => {
+                console.log(error);
+              });
+        }
     }
 
     render() {
-        return (
+        let content;
+        const {isAuthenticated, flash} = this.props.authContext.state;
+
+        if (isAuthenticated) {
+          content = (
             <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
             <p>
@@ -27,6 +62,17 @@ export class Content extends Component {
               Learn React
             </a>
           </header>
+          );
+        } else {
+          content = (
+            <div> Denied </div>
+          );
+        }
+
+        return (
+            <div>
+              {content}
+            </div>
         );
     }
 

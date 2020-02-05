@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {UrlParams} from '../support/UrlParams'
+
 
 const API_URI = process.env.REACT_APP_API_PREFIX || '/api';
 
