@@ -44,23 +44,20 @@ export class Content extends Component {
 
     render() {
         let content;
-        const {isAuthenticated, flash, authState} = this.props.authContext.state;
+        const {isAuthenticated, flash, authState, roles} = this.props.authContext.state;
 
         if (isAuthenticated) {
           content = (
             <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
+            <h2>Assigned Roles</h2>
+            <ul>
+            {
+              roles.map(function(name) {
+                return <li key={name}>{name}</li>
+              })
+            }
+      </ul>
           </header>
           );
         } else if (authState === 'error') {
