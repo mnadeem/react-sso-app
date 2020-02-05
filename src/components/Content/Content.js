@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import logo from '../../imgs/logo.svg';
-import {UrlParams} from '../support/UrlParams'
+import {UrlParams} from '../../support/UrlParams'
 export class Content extends Component {
 
     async componentDidMount() {
@@ -15,7 +15,7 @@ export class Content extends Component {
 
         window.history.replaceState({}, null, '/');
 
-        if (!window.sessionStorge.getItem('authToken')) {
+        if (!sessionStorage.getItem('authToken')) {
             if (code) {
               return getAuthToken(code)
                         .then(res =>{
