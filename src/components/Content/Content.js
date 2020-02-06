@@ -10,7 +10,6 @@ export class Content extends Component {
     } = this.props.authContext.state;
 
     const HREF = window.location.href.trim();
-    const DOMAIN = HREF.substring(0, HREF.lastIndexOf("/"));
 
     const urlParams = new UrlParams(HREF);
     const code = urlParams.get("code");
@@ -19,7 +18,7 @@ export class Content extends Component {
 
     if (!sessionStorage.getItem("authToken")) {
       if (code) {
-        return getAuthToken(code)
+        return getAuthToken(code, 'keycloak', 'demo')
           .then(res => {
             console.log("Successfully Authenticated.");
           })
@@ -28,7 +27,7 @@ export class Content extends Component {
           });
       } else {
         try {
-          return await doAuthRedirect(DOMAIN);
+          return await doAuthRedirect('keycloak', 'demo');
         } catch (error) {
           console.log(error);
         }

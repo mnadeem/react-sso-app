@@ -4,49 +4,39 @@ import requestPromise from "request-promise";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import { TokenVerifier } from "./TokenVerifier";
+import { OAuthStrategies } from "./auth/OAuthStrategies";
 
 dotenv.config();
 
 const app = express();
+const oAuthStrategies = new OAuthStrategies();
 
 app.use(express.json());
 app.use(cors());
 
 app.get("/api/authurl", (req, res) => {
-  const authUrl = process.env.SSO_AUTH_URL;
-  const clientId = process.env.SSO_CLIENT_ID;
-  const scope = process.env.SSO_SCOPE;
-  const redirectUri = process.env.SSO_REDIRECT_URI;
+  const { idp, realm } = req.query;
+  const authStrategy = oAuthStrategies.getStrategy(idp, realm);
+
   res.send({
-    url: `${authUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
+    url: authStrategy.getAuthUrl()
   });
 });
 
 app.post("/api/authtoken", (req, res) => {
-  const code = req.body.code;
-  const options = {
-    method: "POST",
-    uri: process.env.SSO_TOKEN_URL,
-    form: {
-      grant_type: "authorization_code",
-      client_id: process.env.SSO_CLIENT_ID,
-      client_secret: process.env.SSO_CLIENT_SECRET,
-      redirect_uri: process.env.SSO_REDIRECT_URI,
-      scope: process.env.SSO_SCOPE,
-      code
-    }
-  };
-  requestPromise(options)
+  const {code, idp, realm} = req.body;
+  const authStrategy = oAuthStrategies.getStrategy(idp, realm);
+
+  requestPromise(authStrategy.getAuthTokenOptions(code))
     .then(tokenRes => {
-      const userInfo = jwt.decode(JSON.parse(tokenRes).access_token);
-      const userRoles = getRoles(userInfo);
-      console.log(
-        `User ${userInfo.preferred_username} successfully logged in.`
-      );
+      const jwtAccessToken = jwt.decode(JSON.parse(tokenRes).access_token);
+      const user = authStrategy.getUser(jwtAccessToken);
+
+      console.log(`User ${user.userId} successfully logged in.`);
       res.status(200).send({
-        authToken: createJwt(userInfo, userRoles),
-        userId: userInfo.preferred_username,
-        roles: userRoles
+        authToken: createJwt(user),
+        userId: user.userId,
+        roles: user.roles
       });
     })
     .catch(error => {
@@ -55,15 +45,11 @@ app.post("/api/authtoken", (req, res) => {
     });
 });
 
-function getRoles(userInfo) {
-  return userInfo.resource_access.react.roles;
-}
-
-function createJwt(userInfo, userRoles) {
+function createJwt(user) {
   return jwt.sign(
     {
-      userId: userInfo.preferred_username,
-      roles: userRoles
+      userId: user.userId,
+      roles: user.roles
     },
     process.env.TOKEN_SECRET,
     {

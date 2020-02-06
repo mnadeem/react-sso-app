@@ -18,11 +18,11 @@ export class AuthProvider extends Component {
 
     this.state = {
       ...initialState,
-      doAuthRedirect: DOMAIN => {
-        return this.doAuthRedirect(DOMAIN);
+      doAuthRedirect: (idp, realm) => {
+        return this.doAuthRedirect(idp, realm);
       },
-      getAuthToken: code => {
-        return this.getAuthToken(code);
+      getAuthToken: (code, idp, realm) => {
+        return this.getAuthToken(code, idp, realm);
       },
       reAuth: () => {
         return this.reAuth();
@@ -30,9 +30,13 @@ export class AuthProvider extends Component {
     };
   }
 
-  doAuthRedirect = DOMAIN => {
+  doAuthRedirect = (idp, realm) => {
+    const params = {
+      idp,
+      realm
+    };
     return axios
-      .get(`${API_URI}/authurl`)
+      .get(`${API_URI}/authurl`, {params : params})
       .then(result => {
         window.location.assign(result.data.url);
       })
@@ -41,9 +45,11 @@ export class AuthProvider extends Component {
       });
   };
 
-  getAuthToken = code => {
+  getAuthToken = (code, idp, realm) => {
     const payload = {
-      code
+      code,
+      idp,
+      realm
     };
     return axios
       .post(`${API_URI}/authtoken`, payload)
