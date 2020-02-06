@@ -8,7 +8,6 @@ export class Content extends Component {
 
         const HREF = window.location.href.trim();
         const DOMAIN = HREF.substring(0, HREF.lastIndexOf('/'));
-        const PATHNAME = HREF.substring(HREF.lastIndexOf('/') + 1).trim();
 
         const urlParams = new UrlParams(HREF);
         const code = urlParams.get('code');
@@ -62,11 +61,11 @@ export class Content extends Component {
           );
         } else if (authState === 'error') {
           content = (
-            <div> Denied </div>
+            <div> {flash} </div>
           );
         } else {
           content = (
-            <div> Attempting to authorize </div>
+            <div> {flash} </div>
           );
         }
 
