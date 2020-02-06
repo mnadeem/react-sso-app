@@ -33,16 +33,9 @@ export class AuthProvider extends Component {
 
   doAuthRedirect = DOMAIN => {
     return axios
-      .get(`${API_URI}/ssoconfigs`)
+      .get(`${API_URI}/authurl`)
       .then(result => {
-        const ssoConfigs = result.data.ssoConfigs;
-        const { authUrl, clientId, scope } = ssoConfigs;
-
-        let DOMAIN_ = process.env.REACT_APP_REDIRECT_URI || DOMAIN;
-
-        window.location.assign(
-          `${authUrl}?response_type=code&client_id=${clientId}&redirect_uri=${DOMAIN_}&scope=${scope}`
-        );
+        window.location.assign(result.data.url);
       })
       .catch(error => {
         console.error("Error obtaining sso configuration.", error);

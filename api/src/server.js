@@ -12,13 +12,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/api/ssoconfigs", (req, res) => {
+app.get("/api/authurl", (req, res) => {
+  const authUrl = process.env.SSO_AUTH_URL;
+  const clientId = process.env.SSO_CLIENT_ID;
+  const scope = process.env.SSO_SCOPE;
+  const redirectUri = process.env.SSO_REDIRECT_URI;
   res.send({
-    ssoConfigs: {
-      authUrl: process.env.SSO_AUTH_URL,
-      clientId: process.env.SSO_CLIENT_ID,
-      scope: process.env.SSO_SCOPE
-    }
+    url: `${authUrl}?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`
   });
 });
 
