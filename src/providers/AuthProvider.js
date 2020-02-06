@@ -9,7 +9,6 @@ const initialState = {
   isAuthenticated: false,
   userId: "",
   roles: [],
-  ssoConfigs: {},
   flash: ""
 };
 
