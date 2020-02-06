@@ -122,7 +122,7 @@ export class AuthProvider extends Component {
     this.setState({
       ...newState,
       ...initialState,
-      authState: "logget-out",
+      authState: "logged-out",
       flash: "Thank you for using app"
     });
   };
