@@ -19,7 +19,7 @@ app.get("/api/authurl", (req, res) => {
   const authStrategy = oAuthStrategies.getStrategy(idp, realm);
 
   res.send({
-    url: authStrategy.getAuthUrl()
+    url: authStrategy.getAuthUrl({state : uuid()})
   });
 });
 
@@ -44,6 +44,10 @@ app.post("/api/authtoken", (req, res) => {
       res.sendStatus(error.statusCode);
     });
 });
+
+function uuid() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
 
 function createJwt(user) {
   return jwt.sign(

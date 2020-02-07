@@ -14,9 +14,19 @@ export class OAuthStrategies {
       tokenUrl: process.env.KEYCLOAK_DEMO_SSO_TOKEN_URL
     };
 
+    const OKTA_OPTIONS = {
+      realm: "demo",
+      authUrl: process.env.OKTA_SSO_AUTH_URL,
+      clientId: process.env.OKTA_SSO_CLIENT_ID,
+      clientSecret: process.env.OKTA_SSO_CLIENT_SECRET,
+      scope: process.env.OKTA_SSO_SCOPE,
+      redirectUri: process.env.SSO_REDIRECT_URI,
+      tokenUrl: process.env.OKTA_SSO_TOKEN_URL
+    };
+
     this.strategies = [
       new KeycloakOAuthStrategy(KEYCLOAK_DEMO_OPTIONS),
-      new OktaOAuthStrategy()
+      new OktaOAuthStrategy(OKTA_OPTIONS)
     ];
   }
 
