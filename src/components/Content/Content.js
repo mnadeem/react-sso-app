@@ -58,6 +58,7 @@ export class Content extends Component {
       isAuthenticated,
       flash,
       authState,
+      userId,
       roles
     } = this.props.authContext.state;
 
@@ -65,7 +66,7 @@ export class Content extends Component {
       content = (
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Assigned Roles</h2>
+          <h2>Assigned Roles to {userId}</h2>
           <ul>
             {roles.map(function(name) {
               return <li key={name}>{name}</li>;

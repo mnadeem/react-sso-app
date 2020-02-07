@@ -49,5 +49,10 @@ export class OktaOAuthStrategy extends OAuthStrategy {
     return options;
   }
 
-  getUser(jwtAccessToken) { }
+  getUser(jwtAccessToken) { 
+    return {
+      userId : jwtAccessToken.sub,
+      roles : []
+    };
+  }
 }
