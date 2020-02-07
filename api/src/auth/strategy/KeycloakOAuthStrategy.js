@@ -14,7 +14,7 @@ export class KeycloakOAuthStrategy extends OAuthStrategy {
     this.tokenUrl = options.tokenUrl;
   }
 
-  canHandle (idp, realm){
+  canHandle (idp, realm) {
     return this.idp === idp && this.realm === realm;
   }
 
