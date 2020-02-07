@@ -41,7 +41,7 @@ export class AuthProvider extends Component {
         window.location.assign(result.data.url);
       })
       .catch(error => {
-        console.error("Error obtaining sso configuration.", error);
+        console.error("Error obtaining Auth URL.", error);
       });
   };
 
