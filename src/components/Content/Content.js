@@ -2,54 +2,70 @@ import React, { Component } from "react";
 import logo from "../../imgs/logo.svg";
 import { UrlParams } from "../../support/UrlParams";
 export class Content extends Component {
+  
   async componentDidMount() {
-    const {
-      doAuthRedirect,
-      getAuthToken,
-      reAuth
-    } = this.props.authContext.state;
-
     const HREF = window.location.href.trim();
-
     const urlParams = new UrlParams(HREF);
-    const code = urlParams.get("code");
 
     window.history.replaceState({}, null, "/");
 
     if (!sessionStorage.getItem("authToken")) {
-
-      if (code) {
-        return getAuthToken(code, sessionStorage.getItem("idp"), sessionStorage.getItem("realm"))
-          .then(res => {
-            console.log("Successfully Authenticated.");
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      } else {
-        const idp = urlParams.get("idp");
-        const realm = urlParams.get("realm");
-        if (idp) {
-          window.sessionStorage.setItem('idp', idp);
-        }
-        if (realm) {
-          window.sessionStorage.setItem('realm', realm);
-        }
-        try {         
-          return await doAuthRedirect(idp, realm);
-        } catch (error) {
-          console.log(error);
-        }
-      }
+      await this.oAuth2Flow(urlParams);
     } else {
-      Promise.all([reAuth()])
-        .then(res => {
-          console.log("Successfully reAuthenticated.");
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      await this.reAuthenticate();
     }
+  }
+
+  async reAuthenticate() {
+    const { reAuth } = this.props.authContext.state;
+    Promise.all([reAuth()])
+      .then(res => {
+        console.log("Successfully reAuthenticated.");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  async oAuth2Flow(urlParams) {
+    const code = urlParams.get("code");
+    if (code) {
+      await this.extractToken(code);
+    } else {
+      await this.redirectForToken(urlParams);
+    }
+  }
+
+  async redirectForToken(urlParams) {
+    const { doAuthRedirect } = this.props.authContext.state;
+    const idp = urlParams.get("idp");
+    const realm = urlParams.get("realm");
+    if (idp) {
+      window.sessionStorage.setItem("idp", idp);
+    }
+    if (realm) {
+      window.sessionStorage.setItem("realm", realm);
+    }
+    try {
+      return await doAuthRedirect(idp, realm);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async extractToken(code) {
+    const { getAuthToken } = this.props.authContext.state;
+    return await getAuthToken(
+      code,
+      sessionStorage.getItem("idp"),
+      sessionStorage.getItem("realm")
+    )
+      .then(res => {
+        console.log("Successfully Authenticated.");
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {

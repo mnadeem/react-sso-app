@@ -14,17 +14,6 @@ const oAuthStrategies = new OAuthStrategies();
 app.use(express.json());
 app.use(cors());
 
-app.get("/api/entity", (req, res) => {
-  const { idp, realm } = req.query;
-  const result = {entity : true};
-  try {
-    oAuthStrategies.getStrategy(idp, realm);
-  } catch (error) {
-    result.entity = false;
-  }
-  res.send(result);
-});
-
 app.get("/api/authurl", (req, res) => {
   const { idp, realm } = req.query;
   const authStrategy = oAuthStrategies.getStrategy(idp, realm);
