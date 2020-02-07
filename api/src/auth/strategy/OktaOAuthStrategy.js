@@ -18,14 +18,17 @@ export class OktaOAuthStrategy extends OAuthStrategy {
   }
 
   getAuthUrl(options) {
+    return `${this.authUrl}?response_type=code&client_id=${this.clientId}&redirect_uri=${this.redirectUri}&scope=${this.scope}${this.getMoreParams(options)}`;
+  }
+
+  getMoreParams(options) {
     let moreParams = '';
     if (options) {
         for (var [key, value] of options) {
             moreParams += '&' + key + '=' + value;
         }
     }
-
-    return `${this.authUrl}?response_type=code&client_id=${this.clientId}&redirect_uri=${this.redirectUri}&scope=${this.scope}${moreParams}`;
+    return moreParams;
   }
 
   getAuthTokenOptions(code) {
