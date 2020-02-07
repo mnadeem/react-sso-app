@@ -38,8 +38,8 @@ export class Content extends Component {
 
   async redirectForCode(urlParams) {
     const { doAuthRedirect } = this.props.authContext.state;
-    const idp = urlParams.get("idp");
-    const realm = urlParams.get("realm");
+    const idp = urlParams.get("idp") || "keycloak";
+    const realm = urlParams.get("realm") || "demo";
     if (idp) {
       window.sessionStorage.setItem("idp", idp);
     }
