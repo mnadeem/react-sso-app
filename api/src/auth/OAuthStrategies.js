@@ -1,22 +1,22 @@
 import { KeycloakOAuthStrategy } from "./strategy/KeycloakOAuthStrategy";
-import { PingfederateOAuthStrategy } from "./strategy/PingfederateOAuthStrategy";
+import { OktaOAuthStrategy } from "./strategy/OktaOAuthStrategy";
 
 export class OAuthStrategies {
 
   constructor() {
     const KEYCLOAK_DEMO_OPTIONS = {
       realm: "demo",
-      authUrl: process.env.SSO_AUTH_URL,
-      clientId: process.env.SSO_CLIENT_ID,
-      clientSecret: process.env.SSO_CLIENT_SECRET,
-      scope: process.env.SSO_SCOPE,
+      authUrl: process.env.KEYCLOAK_DEMO_SSO_AUTH_URL,
+      clientId: process.env.KEYCLOAK_DEMO_SSO_CLIENT_ID,
+      clientSecret: process.env.KEYCLOAK_DEMO_SSO_CLIENT_SECRET,
+      scope: process.env.KEYCLOAK_DEMO_SSO_SCOPE,
       redirectUri: process.env.SSO_REDIRECT_URI,
-      tokenUrl: process.env.SSO_TOKEN_URL
+      tokenUrl: process.env.KEYCLOAK_DEMO_SSO_TOKEN_URL
     };
 
     this.strategies = [
       new KeycloakOAuthStrategy(KEYCLOAK_DEMO_OPTIONS),
-      new PingfederateOAuthStrategy()
+      new OktaOAuthStrategy()
     ];
   }
 

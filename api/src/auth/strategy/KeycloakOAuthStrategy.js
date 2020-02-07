@@ -18,7 +18,7 @@ export class KeycloakOAuthStrategy extends OAuthStrategy {
     return this.idp === idp && this.realm === realm;
   }
 
-  getAuthUrl() {
+  getAuthUrl(options) {
     return `${this.authUrl}?response_type=code&client_id=${this.clientId}&redirect_uri=${this.redirectUri}&scope=${this.scope}`;
   }
 

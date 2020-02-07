@@ -4,7 +4,7 @@ export class OAuthStrategy {
 
     }
    
-    getAuthUrl() {
+    getAuthUrl(options) {
 
     }
 
