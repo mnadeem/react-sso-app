@@ -17,8 +17,9 @@ export class Content extends Component {
     window.history.replaceState({}, null, "/");
 
     if (!sessionStorage.getItem("authToken")) {
+
       if (code) {
-        return getAuthToken(code, 'keycloak', 'demo')
+        return getAuthToken(code, sessionStorage.getItem("idp"), sessionStorage.getItem("realm"))
           .then(res => {
             console.log("Successfully Authenticated.");
           })
@@ -26,8 +27,16 @@ export class Content extends Component {
             console.log(error);
           });
       } else {
-        try {
-          return await doAuthRedirect('keycloak', 'demo');
+        const idp = urlParams.get("idp");
+        const realm = urlParams.get("realm");
+        if (idp) {
+          window.sessionStorage.setItem('idp', idp);
+        }
+        if (realm) {
+          window.sessionStorage.setItem('realm', realm);
+        }
+        try {         
+          return await doAuthRedirect(idp, realm);
         } catch (error) {
           console.log(error);
         }
