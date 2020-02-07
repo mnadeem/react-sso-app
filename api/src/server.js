@@ -40,7 +40,7 @@ app.post("/api/authtoken", (req, res) => {
       });
     })
     .catch(error => {
-      console.log(error.message);
+      console.error("Error in Auth Token", error);
       res.sendStatus(error.statusCode);
     });
 });

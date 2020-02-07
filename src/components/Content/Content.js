@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import logo from "../../imgs/logo.svg";
 import { UrlParams } from "../../support/UrlParams";
 export class Content extends Component {
-  
+
   async componentDidMount() {
     const HREF = window.location.href.trim();
     const urlParams = new UrlParams(HREF);
@@ -23,7 +23,7 @@ export class Content extends Component {
         console.log("Successfully reAuthenticated.");
       })
       .catch(error => {
-        console.log(error);
+        console.error("Error reAuthenticating", error);
       });
   }
 
@@ -32,11 +32,11 @@ export class Content extends Component {
     if (code) {
       await this.extractToken(code);
     } else {
-      await this.redirectForToken(urlParams);
+      await this.redirectForCode(urlParams);
     }
   }
 
-  async redirectForToken(urlParams) {
+  async redirectForCode(urlParams) {
     const { doAuthRedirect } = this.props.authContext.state;
     const idp = urlParams.get("idp");
     const realm = urlParams.get("realm");
@@ -49,7 +49,7 @@ export class Content extends Component {
     try {
       return await doAuthRedirect(idp, realm);
     } catch (error) {
-      console.log(error);
+      console.error("Error redirecting for code", error);
     }
   }
 
