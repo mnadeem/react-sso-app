@@ -1,0 +1,10 @@
+version: '3'
+services: 
+    api:
+        build: api
+        ports: 
+            - "5544:5544"
+    ui:
+        build: .
+        ports: 
+            - "5000:5000"
