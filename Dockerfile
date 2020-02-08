@@ -1,6 +1,6 @@
 FROM node:10-15-1-jessie
 
-EXPOSE 5000
+EXPOSE 3000
 
 ENV APP_ROOT=/root/app-root \
     NODEJS_VERSION=8 \

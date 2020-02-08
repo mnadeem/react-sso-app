@@ -26,4 +26,4 @@ app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-let server = app.listen(5000);
+let server = app.listen(3000);
