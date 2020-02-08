@@ -3,7 +3,7 @@
 Demonstrates how multi IDP Single sign-on SSO (Authentication & Authorization) can be implemented in React Based front end application with NodeJS base back end application.
 
 Common code which support all IDPs agnostically at React Side.
-Various strategies have been implemented to support various IDPS, currently implementation have been provided for FusionAuth, Keycloak, Okta, PingFederate 
+Various strategies have been implemented to support various IDPS, currently implementation have been provided for FusionAuth, Keycloak, Okta, PingFederate. 
 Support for other IDPs can be similarly and easily implemented. 
 
 * Implement OAuthStrategy, look for implementations in package **auth.strategy**
