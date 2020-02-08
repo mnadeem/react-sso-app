@@ -1,5 +1,6 @@
 import { KeycloakOAuthStrategy } from "./strategy/KeycloakOAuthStrategy";
 import { OktaOAuthStrategy } from "./strategy/OktaOAuthStrategy";
+import {FusionOAuthStrategy} from './strategy/FusionOAuthStrategy'
 
 export class OAuthStrategies {
 
@@ -24,9 +25,20 @@ export class OAuthStrategies {
       tokenUrl: process.env.OKTA_SSO_TOKEN_URL
     };
 
+    const FUSION_OPTIONS = {
+      realm: "demo",
+      authUrl: process.env.FUSION_SSO_AUTH_URL,
+      clientId: process.env.FUSION_SSO_CLIENT_ID,
+      clientSecret: process.env.FUSION_SSO_CLIENT_SECRET,
+      scope: process.env.FUSION_SSO_SCOPE,
+      redirectUri: process.env.SSO_REDIRECT_URI,
+      tokenUrl: process.env.FUSION_SSO_TOKEN_URL
+    };
+
     this.strategies = [
       new KeycloakOAuthStrategy(KEYCLOAK_DEMO_OPTIONS),
-      new OktaOAuthStrategy(OKTA_OPTIONS)
+      new OktaOAuthStrategy(OKTA_OPTIONS),
+      new FusionOAuthStrategy(FUSION_OPTIONS)
     ];
   }
 
