@@ -1,6 +1,7 @@
 import { KeycloakOAuthStrategy } from "./strategy/KeycloakOAuthStrategy";
 import { OktaOAuthStrategy } from "./strategy/OktaOAuthStrategy";
 import { FusionOAuthStrategy } from "./strategy/FusionOAuthStrategy";
+import { PFOAuthStrategy } from "./strategy/PFOAuthStrategy";
 
 function fusionOptions() {
   const result = {
@@ -28,6 +29,19 @@ function oktaOptions() {
   return result;
 }
 
+function pfOptions() {
+  const result = {
+    realm: "demo",
+    authUrl: process.env.PF_SSO_AUTH_URL,
+    clientId: process.env.PF_SSO_CLIENT_ID,
+    clientSecret: process.env.PF_SSO_CLIENT_SECRET,
+    scope: process.env.PF_SSO_SCOPE,
+    redirectUri: process.env.SSO_REDIRECT_URI,
+    tokenUrl: process.env.PF_SSO_TOKEN_URL
+  };
+  return result;
+}
+
 function keycloakOptions() {
   const result = {
     realm: "demo",
@@ -46,7 +60,8 @@ export class OAuthStrategies {
     this.strategies = [
       new KeycloakOAuthStrategy(keycloakOptions()),
       new OktaOAuthStrategy(oktaOptions()),
-      new FusionOAuthStrategy(fusionOptions())
+      new FusionOAuthStrategy(fusionOptions()),
+      new PFOAuthStrategy(pfOptions())
     ];
   }
 
