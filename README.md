@@ -20,11 +20,11 @@ Update [environment variables](https://github.com/mnadeem/react-sso-app/blob/mas
 
 ## Start API
 
-`react-sso-app\api>npm run dev `
+`react-sso-app\api>  npm run dev `
 
 ## Start UI
 
-`react-sso-app>npm start`
+`react-sso-app>  npm start`
 
 ## Access the Application
 * http://localhost:3000?idp=okta
