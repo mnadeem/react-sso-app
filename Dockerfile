@@ -13,7 +13,7 @@ ENV HOME=${APP_ROOT}} \
 
 RUN mkdir -p ${APP_ROOT} && \
     mkdir -p ${APP_ROOT}/.npm && \
-    chown -R 1001:0 $${APP_ROOT} && \
+    chown -R 1001:0 ${APP_ROOT} && \
     chmod -R ug+rwx ${APP_ROOT}
 
 COPY . ${APP_ROOT}
