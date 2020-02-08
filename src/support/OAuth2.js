@@ -6,13 +6,12 @@ export class OAuth2 {
   async authorizationCodeFlow(urlParams) {
     if (
       this.options.sessionStorage.getItem("authToken") &&
-      urlParams.get("idp") !== this.options.sessionStorage.getItem("idp") &&
-      urlParams.get("realm") !== this.options.sessionStorage.getItem("realm")
+      urlParams.get("idp") && urlParams.get("idp") !== this.options.sessionStorage.getItem("idp")
     ) {
       this.options.sessionStorage.removeItem("authToken");
       this.options.sessionStorage.removeItem("idp");
       this.options.sessionStorage.removeItem("realm");
-      this.options.clearSession();
+      this.options.logout();
       console.log("Invalid Session.");
     }
 

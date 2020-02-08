@@ -14,7 +14,7 @@ export class Content extends Component {
       reAuth,
       doAuthRedirect,
       getAuthToken,
-      clearSession
+      logout
     } = this.props.authContext.state;
 
     const oAuth2 = new OAuth2({
@@ -22,7 +22,7 @@ export class Content extends Component {
       reAuth: reAuth,
       doAuthRedirect: doAuthRedirect,
       getAuthToken: getAuthToken,
-      clearSession: clearSession
+      logout: logout
     });
 
     oAuth2.authorizationCodeFlow(urlParams);
