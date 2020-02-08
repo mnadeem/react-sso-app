@@ -9,7 +9,7 @@ Support for other IDPs can be similarly and easily implemented.
 * Implement OAuthStrategy, look for implementations in package **auth.strategy**
 * Add an entry in OAuthStrategies 
 
-## Configure IDPS
+## Configure IDPs
 
 Start the **keycloak** server and configure it as described from [here](https://reachmnadeem.wordpress.com/2020/02/05/authentication-sso-with-oauth2-and-jwt-in-react-application-with-nodejs-back-end-and-keycloak-iam/)
 
