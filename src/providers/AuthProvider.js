@@ -26,6 +26,9 @@ export class AuthProvider extends Component {
       },
       reAuth: () => {
         return this.reAuth();
+      },
+      clearSession: () => {
+        return this.clearSession();
       }
     };
   }
@@ -124,6 +127,12 @@ export class AuthProvider extends Component {
       flash: "Thank you for using app"
     });
   };
+
+  clearSession = () => {
+    this.setState({
+      ...initialState
+    });
+  }
 
   render() {
     return (

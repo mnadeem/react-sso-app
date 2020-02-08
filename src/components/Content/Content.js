@@ -3,7 +3,7 @@ import logo from "../../imgs/logo.svg";
 import { UrlParams } from "../../support/UrlParams";
 import { OAuth2 } from "../../support/OAuth2";
 export class Content extends Component {
-  
+
   async componentDidMount() {
     const HREF = window.location.href.trim();
     const urlParams = new UrlParams(HREF);
@@ -13,14 +13,16 @@ export class Content extends Component {
     const {
       reAuth,
       doAuthRedirect,
-      getAuthToken
+      getAuthToken,
+      clearSession
     } = this.props.authContext.state;
 
     const oAuth2 = new OAuth2({
       sessionStorage: window.sessionStorage,
       reAuth: reAuth,
       doAuthRedirect: doAuthRedirect,
-      getAuthToken: getAuthToken
+      getAuthToken: getAuthToken,
+      clearSession: clearSession
     });
 
     oAuth2.authorizationCodeFlow(urlParams);

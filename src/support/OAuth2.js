@@ -1,10 +1,21 @@
 export class OAuth2 {
-
   constructor(options) {
     this.options = options;
   }
 
   async authorizationCodeFlow(urlParams) {
+    if (
+      this.options.sessionStorage.getItem("authToken") &&
+      urlParams.get("idp") !== this.options.sessionStorage.getItem("idp") &&
+      urlParams.get("realm") !== this.options.sessionStorage.getItem("realm")
+    ) {
+      this.options.sessionStorage.removeItem("authToken");
+      this.options.sessionStorage.removeItem("idp");
+      this.options.sessionStorage.removeItem("realm");
+      this.options.clearSession();
+      console.log("Invalid Session.");
+    }
+
     if (!this.options.sessionStorage.getItem("authToken")) {
       await this.oAuth2Flow(urlParams);
     } else {
