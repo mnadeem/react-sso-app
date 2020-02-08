@@ -27,6 +27,6 @@ Update [environment variables](https://github.com/mnadeem/react-sso-app/blob/mas
 `react-sso-app>npm start`
 
 ## Access the Application
-http://localhost:3000?idp=okta
-http://localhost:3000?idp=keycloak&realm=demo
-http://localhost:3000?idp=fusion
+* http://localhost:3000?idp=okta
+* http://localhost:3000?idp=keycloak&realm=demo
+* http://localhost:3000?idp=fusion
