@@ -5,7 +5,7 @@ const proxy = require('http-proxy-middleware');
 const app = express();
 
 const apiService = process.env.API_ROUTE || 'api';
-const apiUrl = apiService ? `http://${apiService}` : 'http://api:5555';
+const apiUrl = apiService ? `http://${apiService}:5555` : 'http://api:5555';
 
 console.log(apiUrl);
 
