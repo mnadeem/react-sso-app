@@ -60,3 +60,20 @@ react-sso-app_ui_1    docker-entrypoint.sh /bin/ ...   Up      0.0.0.0:3000->300
 
 E:\practices\node\react-sso-app>
 ```
+
+```Powershell
+E:\practices\node\react-sso-app>docker-compose logs -f
+Attaching to react-sso-app_ui_1, react-sso-app_api_1
+ui_1   | http://api:5555
+ui_1   | [HPM] Proxy created: /api  ->  http://api:5555
+ui_1   | http://api:5555
+ui_1   | [HPM] Proxy created: /api  ->  http://api:5555
+api_1  | App is listening for requests on port 5555
+api_1  | App is listening for requests on port 5555
+api_1  | App is listening for requests on port 5555
+api_1  | App is listening for requests on port 5555
+api_1  | User mnadeem@gmail.com successfully logged in.
+api_1  | App is listening for requests on port 5555
+api_1  | User mnadeem@gmail.com successfully logged in.
+
+```
