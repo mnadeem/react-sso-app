@@ -1,11 +1,11 @@
 const express = require('express');
 const path = require('path');
-const proxy = require('http-proxy-middlware');
+const proxy = require('http-proxy-middleware');
 
 const app = express();
 
 const apiService = process.env.API_ROUTE || 'api';
-const apiUrl = apiService ? `http://${apiService}` : 'http://api';
+const apiUrl = apiService ? `http://${apiService}` : 'http://api:5555';
 
 console.log(apiUrl);
 

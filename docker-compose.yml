@@ -3,8 +3,9 @@ services:
     api:
         build: api
         ports: 
-            - "5544:5544"
+            - "5555:5555"
     ui:
         build: .
         ports: 
-            - "5000:5000"
+            - "3000:3000"
+        depends_on: [api]

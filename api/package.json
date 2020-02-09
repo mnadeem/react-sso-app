@@ -9,7 +9,8 @@
     "build": "babel ./src/ --presets=babel-preset-env --out-dir dist --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "server:dev": "nodemon ./src/server.js --exec babel-node --presets babel-preset-env",
     "server:prod": "node ./dist/server.js",
-    "prod": "npm-run-all clean build server:prod",
+    "prod:build": "npm-run-all clean build",
+    "prod": "npm-run-all clean prod:build server:prod",
     "dev": "npm-run-all server:dev"
   },
   "keywords": [],
