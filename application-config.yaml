@@ -1,0 +1,251 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: react-frontend
+metadata:
+  annotations:
+    description: a front end web interface for REACT
+    tags: react, web, frontend
+  name: react-frontend
+
+parameters:
+ - name: API_IMAGE
+   description: API DTR Image
+ - name: UI_IMAGE
+   description: UI DTR Image
+ - name: API_URL
+   description: URL for the API, auto generated if blank
+ - name: UI_URL
+   description: URL for UI, auto genereated if blank
+
+objects:
+
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: app-config
+  data:
+    KEYCLOAK_DEMO_SSO_CLIENT_ID: react
+    KEYCLOAK_DEMO_SSO_CLIENT_SECRET: 202f6844-8b88-45b8-898a-327a74c10ab1
+    KEYCLOAK_DEMO_SSO_AUTH_URL: http://127.0.0.1:8080/auth/realms/demo/protocol/openid-connect/auth
+    KEYCLOAK_DEMO_SSO_TOKEN_URL: http://127.0.0.1:8080/auth/realms/demo/protocol/openid-connect/token
+    KEYCLOAK_DEMO_SSO_SCOPE: openid profile User roles
+
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+    labels:
+      app: api
+    name: api
+  spec:
+    replicas: 1
+    selector:
+      app: api
+      deploymentconfig: api
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources:
+        requests:
+          memory: 100Mi
+          cpu: 60m
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    revisionHistoryLimit: 2
+    template:
+      metadata:
+        annotations:
+        labels:
+          app: api
+          deploymentconfig: api
+      spec:
+        containers:
+          - env:
+              - name: POD_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              - name: KEYCLOAK_DEMO_SSO_CLIENT_ID
+                valueFrom:
+                  configMapKeyRef:
+                    name: app-config
+                    key: KEYCLOAK_DEMO_SSO_CLIENT_ID
+              - name: KEYCLOAK_DEMO_SSO_AUTH_URL
+                valueFrom:
+                  configMapKeyRef:
+                    name: app-config
+                    key: KEYCLOAK_DEMO_SSO_AUTH_URL
+              - name: KEYCLOAK_DEMO_SSO_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: app-secret
+                    key:  KEYCLOAK_DEMO_SSO_CLIENT_SECRET
+            image: ${API_IMAGE}
+            imagePullPolicy: Always
+            name: api
+            ports:
+              - containerPort: 5544
+                protocol: TCP
+            resources:
+              requests:
+                memory: 64Mi
+                cpu: 60m
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+              - name: log-data-volume
+                mountPath: /app/log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+          - name: log-data-volume
+            persistentVolumeClaim:
+              claimName: log-data
+    test: false
+    triggers:
+      - type: ConfigChange
+
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+    labels:
+      app: ui
+    name: ui
+  spec:
+    replicas: 1
+    selector:
+      app: ui
+      deploymentconfig: ui
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources:
+        requests:
+          memory: 100Mi
+          cpu: 60m
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    revisionHistoryLimit: 2
+    template:
+      metadata:
+        annotations:
+        labels:
+          app: ui
+          deploymentconfig: ui
+      spec:
+        containers:
+          - env:
+              - name: API_ROUTE
+                value: 'api'
+              - name: REACT_APP_ROUTE_PREFIX
+                value: '/api'
+              - name: POD_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              - name: REACT_APP_DB_URI
+                value: "http://api-$(POD_NAMESPACE).oc-project.org.com"
+            image: ${UI_IMAGE}
+            imagePullPolicy: Always
+            name: ui
+            ports:
+              - containerPort: 5000
+                protocol: TCP
+            resources:
+              requests:
+                memory: 64Mi
+                cpu: 60m
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+      - type: ConfigChange
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+    labels:
+      app: api
+    name: api
+  spec:
+    ports:
+      - name: 80-tcp
+        port: 80
+        protocol: TCP
+        targetPort: 5544
+    selector:
+      app: api
+      deploymentconfig: api
+    sessionAffinity: None
+    type: ClusterIP
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+    labels:
+      app: ui
+    name: ui
+  spec:
+    ports:
+      - name: 5000-tcp
+        port: 5000
+        protocol: TCP
+        targetPort: 5000
+    selector:
+      app: ui
+      deploymentconfig: ui
+    sessionAffinity: None
+    type: ClusterIP
+
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: ui
+    name: ui
+  spec:
+    port:
+      host: ${UI_URL}
+      targetPort: 5000-tcp
+    to:
+      kind: Service
+      name: ui
+      weight: 100
+    wildcardPolicy: None
+
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+    labels:
+      app: api
+    name: api
+  spec:
+    host: ${API_URL}
+    port:
+      targetPort: 80-tcp
+    to:
+      kind: Service
+      name: api
+      weight: 100
+    wildcardPolicy: None
